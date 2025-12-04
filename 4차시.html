@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>즐거운 마이크로비트 교실 - 4차시</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        /* --- 🎨 디자인 (파란색/하늘색 터치 센서 테마) --- */
+        :root {
+            --primary: #4FC3F7;
+            --secondary: #0288D1;
+            --bg: #E1F5FE;
+            --text: #37474F;
+        }
+
+        body { 
+            font-family: 'Jua', sans-serif; margin: 0; background-color: var(--bg); color: var(--text);
+            min-width: 1024px; overflow-x: auto;
+        }
+        
+        /* 헤더: 클릭 기능 제거 및 커서 기본값으로 변경 */
+        header { background-color: white; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3); }
+        h1 { margin: 0; font-size: 2rem; color: var(--secondary); }
+        .container { width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        /* 인트로 */
+        .intro-section {
+            animation: fadeIn 0.8s;
+            background: white; border-radius: 20px; padding: 60px 40px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 4px solid var(--primary); width: 600px; margin: 50px auto;
+        }
+        .btn-start { padding: 15px 50px; font-size: 1.8rem; background-color: var(--secondary); color: white; border: none; border-radius: 50px; cursor: pointer; font-family: 'Jua'; margin-top: 30px; box-shadow: 0 5px 0 #0277BD; transition: transform 0.2s; }
+        .btn-start:hover { transform: scale(1.05); }
+
+        /* 학습 뷰어 */
+        .study-section { display: none; flex-direction: column; height: 650px; animation: fadeIn 0.5s; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-home { background: #90A4AE; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Jua'; cursor: pointer; font-size: 1.2rem; }
+        .progress-indicator { font-size: 1.2rem; color: #777; background: #fff; padding: 5px 15px; border-radius: 15px; }
+
+        /* 카드 스타일 */
+        .content-card {
+            flex: 1; background: white; border-radius: 30px; padding: 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid var(--primary);
+            display: none; overflow: hidden; 
+        }
+        .text-panel {
+            flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center;
+            border-right: 2px dashed #eee; background: #fff;
+        }
+        .slide-title { font-size: 2.2rem; color: var(--secondary); margin: 0 0 25px 0; }
+        .slide-desc { font-size: 1.7rem; line-height: 1.6; color: #444; word-break: keep-all; }
+        .image-panel {
+            flex: 1; background: #f9f9f9; display: flex; align-items: center; justify-content: center; padding: 30px; 
+        }
+        .image-panel img {
+            max-width: 100%; max-height: 100%; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: contain;
+        }
+
+        .section-card {
+            flex: 1; background: #E1F5FE; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px dashed #29B6F6;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .section-title { font-size: 3.5rem; color: #0277BD; margin-bottom: 30px; }
+        .section-desc { font-size: 1.8rem; color: #555; }
+
+        .quiz-card {
+            flex: 1; background: #E8EAF6; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid #5C6BC0;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .quiz-question { font-size: 2.5rem; margin-bottom: 50px; color: #3949AB; font-weight: bold;}
+        .quiz-options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
+        .btn-quiz { 
+            padding: 20px 50px; font-size: 1.8rem; background: white; border: 3px solid #7986CB; 
+            border-radius: 50px; cursor: pointer; font-family: 'Jua'; color: #555; transition: 0.2s; min-width: 150px;
+        }
+        .btn-quiz:hover { transform: scale(1.05); background: #3949AB; color: white; border-color: #3949AB; }
+
+        .nav-area { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-nav { padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s; }
+        .btn-prev { background: #CFD8DC; color: #546E7A; visibility: hidden; }
+        .btn-next { background: var(--secondary); color: white; box-shadow: 0 5px 0 #01579B; }
+        .btn-next:hover { transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎓 즐거운 마이크로비트 교실</h1>
+    </header>
+
+    <div class="container">
+        <div class="intro-section" id="introPage">
+            <span style="font-size: 5rem; display:block; margin-bottom:20px;">⚡</span>
+            <h1 style="color:var(--secondary);">오늘의 수업 주제:<br>터치 센서와 전기</h1>
+            <p style="font-size: 1.3rem; color:#666; margin-top:20px;">
+                우리 몸에 전기가 흐른다는 사실 알고 있나요?<br>
+                터치 센서의 비밀을 밝혀봐요!
+            </p>
+            <button class="btn-start" onclick="startClass()">수업 시작하기! 👉</button>
+        </div>
+
+        <div class="study-section" id="studyPage">
+            <div class="top-bar">
+                <button class="btn-home" onclick="goHome()">🏠 홈페이지로</button>
+                <div class="progress-indicator" id="progressText">1 / 13</div>
+            </div>
+
+            <div class="content-card" id="normalCard">
+                <div class="text-panel">
+                    <h2 class="slide-title" id="slideTitle">제목</h2>
+                    <div class="slide-desc" id="slideDesc">내용</div>
+                </div>
+                <div class="image-panel" id="imagePanel"></div>
+            </div>
+            <div class="section-card" id="sectionCard">
+                <div class="section-title" id="sectionTitle"></div>
+                <div class="section-desc" id="sectionDesc"></div>
+            </div>
+            <div class="quiz-card" id="quizCard">
+                <div class="quiz-question" id="quizQuestion"></div>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+
+            <div class="nav-area">
+                <button class="btn-nav btn-prev" id="btnPrev" onclick="changeSlide(-1)">이전</button>
+                <button class="btn-nav btn-next" id="btnNext" onclick="changeSlide(1)">다음 👉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 📚 수업 데이터 ---
+        const slides = [
+            // (1) 도입 1: 스마트폰
+            {   
+                type: 'normal', 
+                title: "스마트폰을 꺼내볼까? 📱", 
+                desc: "주머니에 있는 스마트폰을 꺼내서<br>화면을 손가락으로 가볍게 터치해 봐.<br><br>앱이 실행되거나 화면이 넘어가니?", 
+                img: "images/ch4/4-1.png" 
+            },
+            
+            // (2) 도입 2: 키오스크
+            {   
+                type: 'normal', 
+                title: "여기서도 봤을 거야! 🍔", 
+                desc: "햄버거 가게나 카페에 있는<br><b>키오스크</b>도 똑같아.<br><br>화면을 톡 치면 주문이 되지?", 
+                img: "images/ch4/4-2.png" 
+            },
+
+            // (3) 오개념 질문
+            {   
+                type: 'normal', 
+                title: "어떻게 아는 걸까? 🤔", 
+                desc: "이런 기계들엔 <b>터치 센서</b>가 있어.<br><br>그런데... 우리가 손가락으로 누르는<br><b>'압력(힘)'</b> 때문에 터치를 인식하는 걸까?", 
+                img: "images/ch4/4-3.png" 
+            },
+
+            // (4) 반전: 전기
+            {   
+                type: 'normal', 
+                title: "정답은 '전기'야! ⚡", 
+                desc: "아니, 사실은 <b>전기</b>를 이용하는 거야.<br><br>우리 몸에는 아주 약한<br><b>전기(정전기)</b>가 흐르고 있거든.<br>센서가 이 전기를 느끼는 거란다.", 
+                img: "images/ch4/4-4.png" 
+            },
+
+            // (5) 마이크로비트
+            {   
+                type: 'normal', 
+                title: "마이크로비트도 찌릿! 👆", 
+                desc: "마이크로비트 V2의 <b>금색 로고</b>도<br>사람의 전기를 느낄 수 있어.<br><br>여기를 만지면 전기 신호가 흘러서<br>'앗! 터치했다!' 하고 아는 거지.", 
+                img: "images/ch4/4-5.png"
+            },
+
+            // (6) 블록
+            {   
+                type: 'normal', 
+                title: "전기를 느끼는 블록", 
+                desc: "입력 꾸러미에서<br><b>[로고를 눌렀을 때]</b> 블록을 찾아보자.<br><br>이게 바로 터치 센서 블록이야.", 
+                img: "images/ch4/4-6.PNG"
+            },
+
+            // (7) 미션 1 (기본)
+            {   
+                type: 'normal', 
+                title: "미션 1: 로고 터치하기", 
+                desc: "마이크로비트 로고를 터치하면<br>LED 화면에 <b>[놀란 표정]</b>이 나오도록<br>코딩해 보자!", 
+                img: "images/ch4/4-7.PNG" 
+            },
+
+            // (8) 미션 2 (엔트리 연결)
+            {   
+                type: 'normal', 
+                title: "미션 2: 엔트리 연결하기", 
+                desc: "로고를 터치했을 때<br>엔트리 화면의 오브젝트가<br><b>'만졌다!'</b> 라고 말하게 만들어 줄래?", 
+                img: "images/ch4/4-8.PNG" 
+            },
+
+            // (9) 미션 3 (소리+아이콘 - 부활!)
+            {   
+                type: 'normal', 
+                title: "미션 3: 쓰다듬어 주기 🥰", 
+                desc: "이번엔 강아지처럼 쓰다듬어 보자.<br>로고를 터치하면 <b>'띠리링'</b> 소리와<br><b>하트</b>가 나오게 해봐!", 
+                img: "images/ch4/4-9.PNG" 
+            },
+
+            // (10) 마무리
+            {   
+                type: 'normal', 
+                title: "성공! 참 잘했어 🎉", 
+                desc: "전기의 흐름을 이용해서<br>마이크로비트와 신호를 주고받았어.<br><br>마지막으로 퀴즈를 풀어볼까?", 
+                img: "images/ch4/4-10.jfif"
+            },
+
+            // --- 🚩 섹션: 퀴즈 ---
+            {   
+                type: 'section', 
+                title: "🎁 보너스 퀴즈!", 
+                desc: "배운 내용을 확인해 보자.<br>시간이 남은 친구들만 도전!" 
+            },
+
+            // 퀴즈 1
+            {
+                type: 'quiz',
+                question: "Q1. 터치 센서는<br>무엇을 감지할까요?",
+                options: [
+                    { text: "손가락의 힘(압력)", feedback: "땡! 🦾 힘으로 누르는 게 아니야." },
+                    { text: "우리 몸의 전기", isCorrect: true, feedback: "정답! ⚡ 찌릿찌릿 전기를 느껴!" },
+                    { text: "손가락의 온도", feedback: "땡! 🌡️ 뜨거움을 느끼진 않아." }
+                ]
+            },
+            // 퀴즈 2
+            {
+                type: 'quiz',
+                question: "Q2. 마이크로비트에서<br>터치 센서가 있는 곳은?",
+                options: [
+                    { text: "A 버튼", feedback: "땡! 🔘 버튼은 물리적으로 눌러야 해." },
+                    { text: "LED 화면", feedback: "땡! 💡 거긴 빛 센서가 있는 곳이지." },
+                    { text: "금색 로고", isCorrect: true, feedback: "정답! 👆 로고를 살짝 터치해 봐." }
+                ]
+            }
+        ];
+
+        // --- 시스템 로직 (변화 없음) ---
+        let currentSlideIdx = 0;
+        const introPage = document.getElementById('introPage');
+        const studyPage = document.getElementById('studyPage');
+        const normalCard = document.getElementById('normalCard');
+        const sectionCard = document.getElementById('sectionCard');
+        const quizCard = document.getElementById('quizCard');
+        const slideTitle = document.getElementById('slideTitle');
+        const slideDesc = document.getElementById('slideDesc');
+        const imagePanel = document.getElementById('imagePanel');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const sectionDesc = document.getElementById('sectionDesc');
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizOptions = document.getElementById('quizOptions');
+        const progressText = document.getElementById('progressText');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+
+        // [중요] 메인 페이지로 이동 (index.html)
+        function goHome() { 
+            location.href = 'index.html'; 
+        }
+
+        function startClass() {
+            introPage.style.display = 'none';
+            studyPage.style.display = 'flex';
+            currentSlideIdx = 0;
+            renderSlide();
+        }
+        function changeSlide(direction) {
+            const nextIdx = currentSlideIdx + direction;
+            if (nextIdx < 0) return;
+            if (nextIdx >= slides.length) {
+                alert("수업 끝! 아주 잘했어 👍");
+                goHome();
+                return;
+            }
+            currentSlideIdx = nextIdx;
+            renderSlide();
+        }
+        function renderSlide() {
+            const slide = slides[currentSlideIdx];
+            progressText.innerText = `${currentSlideIdx + 1} / ${slides.length}`;
+            btnPrev.style.visibility = (currentSlideIdx === 0) ? "hidden" : "visible";
+            btnNext.innerText = (currentSlideIdx === slides.length - 1) ? "종료 🏁" : "다음 👉";
+
+            normalCard.style.display = 'none';
+            sectionCard.style.display = 'none';
+            quizCard.style.display = 'none';
+
+            if (slide.type === 'normal') {
+                normalCard.style.display = 'flex';
+                slideTitle.innerHTML = slide.title;
+                slideDesc.innerHTML = slide.desc;
+                imagePanel.innerHTML = `<img src="${slide.img}" alt="자료화면">`;
+            } else if (slide.type === 'section') {
+                sectionCard.style.display = 'flex';
+                sectionTitle.innerHTML = slide.title;
+                sectionDesc.innerHTML = slide.desc;
+            } else if (slide.type === 'quiz') {
+                quizCard.style.display = 'flex';
+                quizQuestion.innerHTML = slide.question;
+                quizOptions.innerHTML = ""; 
+                slide.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-quiz';
+                    btn.innerText = opt.text;
+                    btn.onclick = () => {
+                        alert(opt.feedback);
+                        if (opt.isCorrect) changeSlide(1);
+                    };
+                    quizOptions.appendChild(btn);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

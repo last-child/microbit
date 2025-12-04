@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>즐거운 마이크로비트 교실 - 메인</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F0F4F8;
+            --text: #263238;
+        }
+        body {
+            font-family: 'Jua', sans-serif;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            min-width: 1024px;
+        }
+
+        /* 헤더 디자인 */
+        header {
+            background-color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+        }
+        h1 { margin: 0; font-size: 3rem; color: #37474F; margin-bottom: 10px; }
+        p.subtitle { font-size: 1.5rem; color: #78909C; margin: 0; }
+
+        /* 카드 그리드 레이아웃 */
+        .container {
+            width: 1100px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3열 배치 */
+            gap: 30px;
+        }
+
+        /* 개별 카드 디자인 */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 4px solid transparent; /* 호버 효과를 위해 미리 공간 확보 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .emoji { font-size: 4rem; margin-bottom: 20px; transition: transform 0.3s; }
+        .card:hover .emoji { transform: scale(1.2) rotate(10deg); }
+
+        .card-title { font-size: 2rem; margin-bottom: 15px; width: 100%; }
+        .card-desc { font-size: 1.2rem; color: #666; line-height: 1.5; margin-bottom: 20px; }
+        
+        .btn-go {
+            margin-top: auto; /* 버튼을 항상 아래로 */
+            padding: 10px 30px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Jua';
+        }
+
+        /* --- 🎨 각 차시별 테마 색상 (파일 분석 기반) --- */
+        
+        /* 3차시: 빛 센서 (노랑/주황) */
+        .card-3 { border-color: #FFD54F; }
+        .card-3 .card-title { color: #FB8C00; }
+        .card-3 .btn-go { background-color: #FB8C00; }
+        .card-3:hover { background-color: #FFF8E1; }
+
+        /* 4차시: 터치 센서 (하늘/파랑) */
+        .card-4 { border-color: #4FC3F7; }
+        .card-4 .card-title { color: #0288D1; }
+        .card-4 .btn-go { background-color: #0288D1; }
+        .card-4:hover { background-color: #E1F5FE; }
+
+        /* 5차시: 가속도 센서 (연두/초록) */
+        .card-5 { border-color: #66BB6A; }
+        .card-5 .card-title { color: #2E7D32; }
+        .card-5 .btn-go { background-color: #2E7D32; }
+        .card-5:hover { background-color: #E8F5E9; }
+
+        /* 7차시: 초음파 센서 (보라) */
+        .card-7 { border-color: #BA68C8; }
+        .card-7 .card-title { color: #7B1FA2; }
+        .card-7 .btn-go { background-color: #7B1FA2; }
+        .card-7:hover { background-color: #F3E5F5; }
+
+        /* 8차시: 눈꽃마을 모험 (아이스 블루) */
+        .card-8 { border-color: #81D4FA; }
+        .card-8 .card-title { color: #039BE5; }
+        .card-8 .btn-go { background-color: #039BE5; }
+        .card-8:hover { background-color: #E1F5FE; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🤖 즐거운 마이크로비트 교실</h1>
+        <p class="subtitle">배우고 싶은 주제를 선택해봐요!</p>
+    </header>
+
+    <div class="container">
+        <a href="3차시.html" class="card card-3">
+            <div class="emoji">✨</div>
+            <div class="card-title">3차시: 빛 센서</div>
+            <div class="card-desc">어두워지면 빛나는<br>스마트 가로등 만들기</div>
+            <div class="btn-go">수업 시작하기 👉</div>
+        </a>
+
+        <a href="4차시.html" class="card card-4">
+            <div class="emoji">⚡</div>
+            <div class="card-title">4차시: 터치 센서</div>
+            <div class="card-desc">찌릿찌릿! 전기가 통하는<br>우리 몸과 터치 센서</div>
+            <div class="btn-go">수업 시작하기 👉</div>
+        </a>
+
+        <a href="5차시.html" class="card card-5">
+            <div class="emoji">🏃</div>
+            <div class="card-title">5차시: 가속도 센서</div>
+            <div class="card-desc">흔들고 기울이고!<br>만보기와 주사위 만들기</div>
+            <div class="btn-go">수업 시작하기 👉</div>
+        </a>
+
+        <a href="7차시.html" class="card card-7">
+            <div class="emoji">🦇</div>
+            <div class="card-title">7차시: 초음파 센서</div>
+            <div class="card-desc">소리로 거리를 잰다고?<br>신비한 오르골 만들기</div>
+            <div class="btn-go">수업 시작하기 👉</div>
+        </a>
+
+        <a href="8차시.html" class="card card-8">
+            <div class="emoji">🐧</div>
+            <div class="card-title">8차시: 눈꽃마을 모험</div>
+            <div class="card-desc">펭귄과 함께 떠나는<br>코딩 게임 모험!</div>
+            <div class="btn-go">게임 하러 가기 👉</div>
+        </a>
+
+        <div class="card" style="border-color:#ccc; cursor: default; opacity: 0.6;">
+            <div class="emoji">🔧</div>
+            <div class="card-title" style="color:#777">준비 중...</div>
+            <div class="card-desc">더 재미있는 수업이<br>준비되고 있어요!</div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>즐거운 마이크로비트 교실 - 5차시</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        /* --- 🎨 디자인 (초록색 가속도 센서 테마) --- */
+        :root {
+            --primary: #66BB6A;
+            --secondary: #2E7D32;
+            --bg: #E8F5E9;
+            --text: #1B5E20;
+        }
+
+        body { 
+            font-family: 'Jua', sans-serif; margin: 0; background-color: var(--bg); color: var(--text);
+            min-width: 1024px; overflow-x: auto;
+        }
+        
+        /* 헤더: 클릭 기능 제거 */
+        header { background-color: white; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3); }
+        h1 { margin: 0; font-size: 2rem; color: var(--secondary); }
+        .container { width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        /* 인트로 */
+        .intro-section {
+            animation: fadeIn 0.8s;
+            background: white; border-radius: 20px; padding: 60px 40px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 4px solid var(--primary); width: 600px; margin: 50px auto;
+        }
+        .btn-start { padding: 15px 50px; font-size: 1.8rem; background-color: var(--secondary); color: white; border: none; border-radius: 50px; cursor: pointer; font-family: 'Jua'; margin-top: 30px; box-shadow: 0 5px 0 #1B5E20; transition: transform 0.2s; }
+        .btn-start:hover { transform: scale(1.05); }
+
+        /* 학습 뷰어 */
+        .study-section { display: none; flex-direction: column; height: 650px; animation: fadeIn 0.5s; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-home { background: #90A4AE; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Jua'; cursor: pointer; font-size: 1.2rem; }
+        .progress-indicator { font-size: 1.2rem; color: #777; background: #fff; padding: 5px 15px; border-radius: 15px; }
+
+        /* 카드 스타일 */
+        .content-card {
+            flex: 1; background: white; border-radius: 30px; padding: 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid var(--primary);
+            display: none; overflow: hidden; 
+        }
+        .text-panel {
+            flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center;
+            border-right: 2px dashed #eee; background: #fff;
+        }
+        .slide-title { font-size: 2.2rem; color: var(--secondary); margin: 0 0 25px 0; }
+        .slide-desc { font-size: 1.7rem; line-height: 1.6; color: #444; word-break: keep-all; }
+        .image-panel {
+            flex: 1; background: #f9f9f9; display: flex; align-items: center; justify-content: center; padding: 30px; 
+        }
+        .image-panel img {
+            max-width: 100%; max-height: 100%; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: contain;
+        }
+
+        .section-card {
+            flex: 1; background: #E8F5E9; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px dashed #66BB6A;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .section-title { font-size: 3.5rem; color: #2E7D32; margin-bottom: 30px; }
+        .section-desc { font-size: 1.8rem; color: #555; }
+
+        .quiz-card {
+            flex: 1; background: #F1F8E9; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid #9CCC65;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .quiz-question { font-size: 2.5rem; margin-bottom: 50px; color: #33691E; font-weight: bold;}
+        .quiz-options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
+        .btn-quiz { 
+            padding: 20px 50px; font-size: 1.8rem; background: white; border: 3px solid #AED581; 
+            border-radius: 50px; cursor: pointer; font-family: 'Jua'; color: #555; transition: 0.2s; min-width: 150px;
+        }
+        .btn-quiz:hover { transform: scale(1.05); background: #33691E; color: white; border-color: #33691E; }
+
+        .nav-area { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-nav { padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s; }
+        .btn-prev { background: #CFD8DC; color: #546E7A; visibility: hidden; }
+        .btn-next { background: var(--secondary); color: white; box-shadow: 0 5px 0 #1B5E20; }
+        .btn-next:hover { transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎓 즐거운 마이크로비트 교실</h1>
+    </header>
+
+    <div class="container">
+        <div class="intro-section" id="introPage">
+            <span style="font-size: 5rem; display:block; margin-bottom:20px;">🏃</span>
+            <h1 style="color:var(--secondary);">오늘의 수업 주제:<br>가속도 센서와 움직임</h1>
+            <p style="font-size: 1.3rem; color:#666; margin-top:20px;">
+                마이크로비트는 내가 움직이는 걸 알 수 있대요.<br>
+                기울기, 흔들림, 떨어짐을 배워볼까요?
+            </p>
+            <button class="btn-start" onclick="startClass()">수업 시작하기! 👉</button>
+        </div>
+
+        <div class="study-section" id="studyPage">
+            <div class="top-bar">
+                <button class="btn-home" onclick="goHome()">🏠 홈페이지로</button>
+                <div class="progress-indicator" id="progressText">1 / 18</div>
+            </div>
+
+            <div class="content-card" id="normalCard">
+                <div class="text-panel">
+                    <h2 class="slide-title" id="slideTitle">제목</h2>
+                    <div class="slide-desc" id="slideDesc">내용</div>
+                </div>
+                <div class="image-panel" id="imagePanel"></div>
+            </div>
+            <div class="section-card" id="sectionCard">
+                <div class="section-title" id="sectionTitle"></div>
+                <div class="section-desc" id="sectionDesc"></div>
+            </div>
+            <div class="quiz-card" id="quizCard">
+                <div class="quiz-question" id="quizQuestion"></div>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+
+            <div class="nav-area">
+                <button class="btn-nav btn-prev" id="btnPrev" onclick="changeSlide(-1)">이전</button>
+                <button class="btn-nav btn-next" id="btnNext" onclick="changeSlide(1)">다음 👉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 📚 수업 데이터 ---
+        const slides = [
+            // (1) 스마트폰 회전
+            {   
+                type: 'normal', 
+                title: "스마트폰을 돌리면? 📱", 
+                desc: "유튜브를 보다가 화면을 가로로 돌리면<br>영상도 같이 회전해서 넓게 나오지?<br><br>스마트폰은 자기가 기울어진 걸 어떻게 알까?", 
+                img: "images/ch5/5-1.png" 
+            },
+            
+            // (2) 레이싱 게임
+            {   
+                type: 'normal', 
+                title: "자동차 운전 게임! 🏎️", 
+                desc: "닌텐도 스위치나 자동차 게임을 할 때<br>컨트롤러를 핸들처럼 이리저리 기울이면<br>자동차가 방향을 바꾸지.<br><br>여기에 비밀이 숨어있어.", 
+                img: "images/ch5/5-2.jpg" 
+            },
+
+            // (3) 가속도 센서 원리 1 (도입)
+            {   
+                type: 'normal', 
+                title: "비밀은 '가속도 센서' 🚀", 
+                desc: "기계 안에는 <b>가속도 센서</b>라는 부품이 있어.<br><br>이 센서는 물체가 <b>어느 쪽으로 기울어졌는지</b>,<br><b>얼마나 빨리 움직이는지</b>를 느껴.", 
+                img: "images/ch5/5-3.png" 
+            },
+
+            // (4) 가속도 센서 원리 2 (물병 비유 - 분리됨)
+            {   
+                type: 'normal', 
+                title: "물병을 상상해 봐 💧", 
+                desc: "물이 반쯤 든 물병을 기울이면 어떻게 될까?<br>물이 낮은 쪽으로 쏠리겠지?<br><br>마이크로비트도 이 원리를 이용해.", 
+                img: "images/ch5/5-4.png" 
+            },
+
+            // (5) 가속도 센서 원리 3 (작은 추 - 추가됨)
+            {   
+                type: 'normal', 
+                title: "센서 속의 비밀 ⚖️", 
+                desc: "가속도 센서 안에는 눈에 보이지 않는<br><b>아주 작은 추</b>가 들어있어.<br><br>우리가 움직일 때마다 이 추가 흔들리면서<br>방향을 알아내는 거란다.", 
+                img: "images/ch5/5-5.png" 
+            },
+
+            // (6) 마이크로비트 뒷면 (문구 수정됨)
+            {   
+                type: 'normal', 
+                title: "어디에 숨어있을까? 🔍", 
+                desc: "마이크로비트 뒷면을 잘 살펴볼까?<br><b>'Motion(모션)'</b>이라고 적힌 곳 근처에<br>아주 작은 칩이 숨어있어.<br><br>이 작은 친구 덕분에<br>마이크로비트는 균형을 느낄 수 있단다.", 
+                img: "images/ch5/5-6.jpg" 
+            },
+
+            // (7) 블록 소개
+            {   
+                type: 'normal', 
+                title: "흔들림 감지 블록", 
+                desc: "입력 꾸러미에 가면<br><b>[흔들림 감지하면]</b> 블록이 있어.<br><br>이 블록 하나로 다양한 동작을 만들 수 있어.", 
+                img: "images/ch5/5-7.jpg" 
+            },
+
+            // (8) 왼쪽 기울기
+            {   
+                type: 'normal', 
+                title: "미션 1: 왼쪽으로 기울여! 👈", 
+                desc: "마이크로비트를 <b>왼쪽으로 기울이면</b><br>LED에 <b>[왼쪽 화살표]</b>가 나오게 해보자.<br><br>블록 옵션에서 '왼쪽으로 기울임'을 선택해!", 
+                img: "images/ch5/5-8.png" 
+            },
+
+            // (9) 오른쪽 기울기
+            {   
+                type: 'normal', 
+                title: "미션 2: 오른쪽으로 기울여! 👉", 
+                desc: "이번엔 반대로 <b>오른쪽으로 기울이면</b><br>LED에 <b>[오른쪽 화살표]</b>가 나오게 해보자.<br><br>방향을 잘 인식하니?", 
+                img: "images/ch5/5-9.png" 
+            },
+
+            // (10) 낙하
+            {   
+                type: 'normal', 
+                title: "미션 3: 으악! 떨어진다! 😱", 
+                desc: "책상 위에서 이불 위로 살짝 떨어뜨려 봐.<br><b>[자유 낙하(떨어짐)]</b>를 감지하면<br><b>[놀란 표정]</b>이 나오게 할 수 있니?", 
+                img: "images/ch5/5-10.png" 
+            },
+
+            // --- 🚩 섹션 1: 응용편 시작 ---
+            {   
+                type: 'section', 
+                title: "🏃‍♂️ 이제 응용해볼까?", 
+                desc: "가속도 센서를 이용해<br>실생활에 필요한 도구를 만들어 보자!" 
+            },
+
+            // (11) 만보기 스토리 1
+            {   
+                type: 'normal', 
+                title: "오늘 얼마나 걸었지?", 
+                desc: "건강을 위해선 많이 걷는 게 좋대.<br>그런데 내가 몇 걸음이나 걸었는지<br>일일이 세기는 너무 귀찮아! 😩", 
+                img: "images/ch5/5-11.png" 
+            },
+
+            // (12) 만보기 스토리 2
+            {   
+                type: 'normal', 
+                title: "흔들릴 때마다 숫자를 세자", 
+                desc: "걸을 때마다 팔이 흔들리지?<br><b>[흔들림]</b>을 감지할 때마다<br><b>변수(걸음수)</b>를 1씩 증가시키면 돼!", 
+                img: "images/ch5/5-12.jpg" 
+            },
+
+            // (13) 만보기 스토리 3
+            {   
+                type: 'normal', 
+                title: "나만의 만보기 완성! 👟", 
+                desc: "이제 마이크로비트를 들고 제자리걸음을 해봐.<br>숫자가 자동으로 올라가니?<br>운동할 때 꼭 챙겨가야겠어!", 
+                img: "images/ch5/5-13.jpg" 
+            },
+
+            // (14) 주사위 스토리 1
+            {   
+                type: 'normal', 
+                title: "주사위가 없어졌어! 🎲", 
+                desc: "친구들과 보드게임을 하려고 했는데<br>주사위를 잃어버렸어.<br>어떡하지? 게임을 못 하는 걸까?", 
+                img: "images/ch5/5-14.png" 
+            },
+
+            // (15) 주사위 스토리 2
+            {   
+                type: 'normal', 
+                title: "디지털 주사위를 만들자", 
+                desc: "마이크로비트를 <b>흔들면</b><br>1부터 6까지의 <b>랜덤한 숫자</b>가<br>나오게 코딩해 보자.", 
+                img: "images/ch5/5-15.png" 
+            },
+
+            // (16) 주사위 스토리 3
+            {   
+                type: 'normal', 
+                title: "게임 다시 시작! 🎮", 
+                desc: "와! 흔들 때마다 새로운 숫자가 나와.<br>잃어버리지 않는 영원한 주사위가 생겼어.<br>친구들아, 게임 다시 시작하자!", 
+                img: "images/ch5/5-16.png" 
+            },
+
+            // --- 🚩 섹션 2: 퀴즈 시작 ---
+            {   
+                type: 'section', 
+                title: "🎁 보너스 퀴즈!", 
+                desc: "가속도 센서 마스터가 되었는지<br>확인해 볼 시간!" 
+            },
+
+            // 퀴즈 1
+            {
+                type: 'quiz',
+                question: "Q1. 기울기와 움직임을<br>감지하는 센서의 이름은?",
+                options: [
+                    { text: "온도 센서", feedback: "땡! 🌡️ 그건 얼마나 더운지 재는 거야." },
+                    { text: "가속도 센서", isCorrect: true, feedback: "정답! 🚀 속도의 변화(가속도)를 느껴!" },
+                    { text: "조도 센서", feedback: "땡! ☀️ 그건 빛의 밝기를 재는 거야." }
+                ]
+            },
+            // 퀴즈 2
+            {
+                type: 'quiz',
+                question: "Q2. 만보기를 만들 때<br>사용하면 좋은 동작은?",
+                options: [
+                    { text: "로고 터치", feedback: "땡! 👇 걸을 때마다 터치하긴 힘들잖아." },
+                    { text: "A 버튼 누름", feedback: "땡! 🔘 버튼 누르기도 귀찮아." },
+                    { text: "흔들림 감지", isCorrect: true, feedback: "정답! 🏃‍♂️ 걸으면 몸이 흔들리니까 딱이야!" }
+                ]
+            }
+        ];
+
+        // --- 시스템 로직 ---
+        let currentSlideIdx = 0;
+        const introPage = document.getElementById('introPage');
+        const studyPage = document.getElementById('studyPage');
+        const normalCard = document.getElementById('normalCard');
+        const sectionCard = document.getElementById('sectionCard');
+        const quizCard = document.getElementById('quizCard');
+        const slideTitle = document.getElementById('slideTitle');
+        const slideDesc = document.getElementById('slideDesc');
+        const imagePanel = document.getElementById('imagePanel');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const sectionDesc = document.getElementById('sectionDesc');
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizOptions = document.getElementById('quizOptions');
+        const progressText = document.getElementById('progressText');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+
+        // [중요] 메인 페이지로 이동 (index.html)
+        function goHome() { 
+            location.href = 'index.html'; 
+        }
+
+        function startClass() {
+            introPage.style.display = 'none';
+            studyPage.style.display = 'flex';
+            currentSlideIdx = 0;
+            renderSlide();
+        }
+        function changeSlide(direction) {
+            const nextIdx = currentSlideIdx + direction;
+            if (nextIdx < 0) return;
+            if (nextIdx >= slides.length) {
+                alert("수업 끝! 오늘도 멋지게 해냈어 🏃‍♂️✨");
+                goHome();
+                return;
+            }
+            currentSlideIdx = nextIdx;
+            renderSlide();
+        }
+        function renderSlide() {
+            const slide = slides[currentSlideIdx];
+            progressText.innerText = `${currentSlideIdx + 1} / ${slides.length}`;
+            btnPrev.style.visibility = (currentSlideIdx === 0) ? "hidden" : "visible";
+            btnNext.innerText = (currentSlideIdx === slides.length - 1) ? "종료 🏁" : "다음 👉";
+
+            normalCard.style.display = 'none';
+            sectionCard.style.display = 'none';
+            quizCard.style.display = 'none';
+
+            if (slide.type === 'normal') {
+                normalCard.style.display = 'flex';
+                slideTitle.innerHTML = slide.title;
+                slideDesc.innerHTML = slide.desc;
+                imagePanel.innerHTML = `<img src="${slide.img}" alt="자료화면">`;
+            } else if (slide.type === 'section') {
+                sectionCard.style.display = 'flex';
+                sectionTitle.innerHTML = slide.title;
+                sectionDesc.innerHTML = slide.desc;
+            } else if (slide.type === 'quiz') {
+                quizCard.style.display = 'flex';
+                quizQuestion.innerHTML = slide.question;
+                quizOptions.innerHTML = ""; 
+                slide.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-quiz';
+                    btn.innerText = opt.text;
+                    btn.onclick = () => {
+                        alert(opt.feedback);
+                        if (opt.isCorrect) changeSlide(1);
+                    };
+                    quizOptions.appendChild(btn);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

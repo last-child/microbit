@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>눈꽃마을 모험</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        /* --- 🎨 디자인 (CSS) --- */
+        :root {
+            --primary: #81D4FA;
+            --secondary: #039BE5;
+            --accent: #FF8A80;
+            --bg: #E1F5FE;
+            --text: #37474F;
+        }
+
+        body { 
+            font-family: 'Jua', sans-serif; 
+            margin: 0; 
+            background-color: var(--bg); 
+            color: var(--text);
+            min-width: 1024px; 
+            overflow-x: auto;
+        }
+        
+        /* 헤더: 클릭 기능 제거 */
+        header { background-color: white; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(135, 206, 250, 0.3); }
+        h1 { margin: 0; font-size: 2rem; color: var(--secondary); }
+
+        .container { 
+            width: 1000px; 
+            margin: 30px auto; 
+            padding: 0 20px; 
+        }
+
+        /* --- 인트로 --- */
+        .intro-section {
+            background: white; border-radius: 20px; padding: 60px 40px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: fadeIn 0.8s;
+            border: 4px solid var(--primary);
+            width: 600px; margin: 50px auto;
+        }
+        .intro-emoji { font-size: 5rem; margin-bottom: 20px; display: block; animation: bounce 2s infinite; }
+        .link-text { color: var(--secondary); text-decoration: underline; font-weight: bold; cursor: pointer; }
+        .btn-start { padding: 15px 50px; font-size: 1.8rem; background-color: var(--secondary); color: white; border: none; border-radius: 50px; cursor: pointer; font-family: 'Jua'; margin-top: 30px; box-shadow: 0 5px 0 #0277BD; transition: transform 0.2s; }
+        .btn-start:hover { transform: scale(1.05); }
+
+        /* --- 튜토리얼 (단일 박스 레이아웃) --- */
+        .tutorial-section { display: none; flex-direction: column; height: 650px; }
+        
+        /* 상단 네비게이션 바 (홈버튼 + 진행도) */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-home { background: #90A4AE; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Jua'; cursor: pointer; font-size: 1.2rem; }
+        .progress-indicator { font-size: 1.2rem; color: #777; background: #fff; padding: 5px 15px; border-radius: 15px; }
+
+        /* 메인 스토리 패널 (중앙 정렬) */
+        .story-panel { 
+            flex: 1; display: flex; flex-direction: column; width: 100%; 
+            animation: fadeIn 0.5s;
+        }
+
+        .story-header { display: flex; align-items: center; justify-content: center; gap: 15px; height: 60px; margin-bottom: 20px; }
+        .character-icon { font-size: 3.5rem; animation: bounce 2s infinite; line-height: 1; }
+        .stage-badge { background: var(--secondary); color: white; padding: 8px 25px; border-radius: 30px; font-size: 1.4rem; white-space: nowrap; box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+
+        /* 말풍선 스타일 (화면 꽉 채우기) */
+        .speech-bubble {
+            flex: 1; background: white; border-radius: 30px; padding: 50px;
+            position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 4px solid var(--primary);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+
+        .story-text { 
+            font-size: 2rem; line-height: 1.6; margin-bottom: 30px; 
+            color: #444; word-break: keep-all; 
+        }
+        
+        .mission-box { 
+            background: #FFF3E0; padding: 30px; border-radius: 20px; 
+            border: 3px dashed #FFB74D; font-size: 1.6rem; 
+            color: #E65100; line-height: 1.6; width: 80%;
+        }
+
+        /* 설명서 뷰 (숨겨져 있다가 나옴) */
+        .manual-view {
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            width: 100%; height: 100%; background: #F1F8E9; border-radius: 30px;
+            border: 4px dashed #AED581; padding: 40px; box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .manual-view h3 { color: #558B2F; font-size: 2.5rem; margin-top: 0; margin-bottom: 30px;}
+        .manual-view ul { list-style: none; padding: 0; margin: 0; width: 80%; }
+        .manual-view li { font-size: 1.5rem; margin-bottom: 15px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; gap: 10px; color: #555; }
+        
+        .btn-play { background: #FF7043; color: white; width: 60%; margin-top: 30px; box-shadow: 0 5px 0 #D84315; text-align: center; text-decoration: none; padding: 20px 0; border-radius: 15px; font-size: 1.8rem; display: block; transition: 0.2s;}
+        .btn-play:hover { transform: scale(1.05); }
+
+        /* 하단 버튼 영역 */
+        .nav-bar { margin-top: 30px; display: flex; justify-content: space-between; }
+        .btn-nav { padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s;}
+        .btn-prev { background: #CFD8DC; color: #546E7A; }
+        .btn-next { background: var(--secondary); color: white; box-shadow: 0 5px 0 #0288D1; }
+        .btn-next:hover { transform: scale(1.05); }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>☃️ 설원 위를 달려라!</h1>
+    </header>
+
+    <div class="container">
+        <div class="intro-section" id="introPage">
+            <span class="intro-emoji">🐧</span>
+            <h1 style="color:var(--secondary);">펭귄과 함께<br>모험을 떠나요!</h1>
+            <p style="font-size: 1.3rem; color:#666; line-height: 1.6;">
+                마이크로비트로 펭귄을 움직여서<br>깃발을 모으는 게임을 만들어봐요.<br><br>
+                <a href="https://playentry.org/project/69271528d72693c7b2cce91a" target="_blank" class="link-text">👉 여기를 눌러 엔트리 만들기 창을 띄우세요!</a>
+            </p>
+            <button class="btn-start" onclick="startTutorial()">튜토리얼 시작! 🚀</button>
+        </div>
+
+        <div class="tutorial-section" id="tutorialPage">
+            
+            <div class="top-bar">
+                <button class="btn-home" onclick="goHome()">🏠 홈페이지로</button>
+                <div class="progress-indicator" id="progressText">1 / 7</div>
+            </div>
+
+            <div class="story-panel" id="storyPanel">
+                
+                <div id="storyModeContainer" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+                    <div class="story-header">
+                        <div class="character-icon">🐧</div>
+                        <span class="stage-badge" id="stageBadge">1단계</span>
+                    </div>
+
+                    <div class="speech-bubble" id="speechBubble">
+                        <div class="story-text" id="storyText">내용</div>
+                        <div class="mission-box" id="missionBox">미션</div>
+                    </div>
+                </div>
+
+                <div class="manual-view" id="manualContainer">
+                    <h3>📜 게임 설명서</h3>
+                    <ul>
+                        <li>🕹️ <b>이동:</b> A, B 버튼으로 좌우 이동!</li>
+                        <li>⬆️ <b>점프:</b> 스페이스 키로 점프!</li>
+                        <li>🚩 <b>목표:</b> 깃발을 모아 100점 만들기</li>
+                        <li>❤️ <b>생명:</b> 하트 5개 (가시에 닿으면 감소)</li>
+                    </ul>
+                    <a href="https://playentry.org/project/69254e45afb77a2a34cf024e" target="_blank" class="btn-play">🎮 완성된 게임 하러 가기</a>
+                </div>
+
+            </div>
+
+            <div class="nav-bar">
+                <button class="btn-nav btn-prev" onclick="prevStep()" id="btnPrev">이전</button>
+                <button class="btn-nav btn-next" onclick="nextStep()" id="btnNext">다음 👉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 스토리 데이터
+        const storySteps = [
+            {
+                badge: "1단계: 왼쪽으로 영차! ⬅️",
+                dialogue: "와! 눈밭이 정말 넓다!<br>먼저 <b>왼쪽</b>으로 가고 싶어.<br>마이크로비트로 날 조종해줄래?",
+                mission: "마이크로비트 <b>[A 버튼]</b>을 누르면<br>왼쪽으로 3만큼 가게 해줘!<br>LED에 <b>왼쪽 화살표</b>도 나오면 좋겠어."
+            },
+            {
+                badge: "2단계: 오른쪽으로 으쌰! ➡️",
+                dialogue: "성공이야! 이번엔 <b>오른쪽</b>으로 가볼까?<br>반대쪽 버튼을 누르면 되겠지?",
+                mission: "마이크로비트 <b>[B 버튼]</b>을 누르면<br>오른쪽으로 3만큼 가게 해줘!<br>LED엔 <b>오른쪽 화살표</b>가 나와야 해."
+            },
+            {
+                badge: "3단계: 왼쪽 벽 쿵! 🚧",
+                dialogue: "아야! 너무 신나게 달리다가<br>세상 끝에 부딪힐 뻔했어.<br><b>왼쪽 벽</b>을 넘어가면 안 되는데...",
+                mission: "내가 <b>[왼쪽 벽]</b>에 닿으면<br>더 이상 못 가게 막아줘!<br>(x 위치를 -220으로 고정해줘)"
+            },
+            {
+                badge: "4단계: 오른쪽 벽 쿵! 🚧",
+                dialogue: "휴, 다행이다. 그런데 반대쪽도 위험해!<br><b>오른쪽 벽</b>도 뚫고 나가면 안 돼.",
+                mission: "이번엔 <b>[오른쪽 벽]</b>에 닿으면<br>튕겨 나오게 막아줘!<br>(x 위치를 220으로 고정해줘)"
+            },
+            {
+                badge: "5단계: 가시다! 점프! 🐇",
+                dialogue: "앗! 저기 뾰족한 가시가 있어!<br>다치지 않게 <b>점프</b>해서 피해야 해.<br>나를 공중으로 띄워줘!",
+                mission: "마이크로비트를 <b>위로 기울이면</b><br>y좌표를 바꿔서 위로 솟았다가<br>다시 내려오게 만들어줘."
+            },
+            {
+                badge: "미션 성공! 🎉",
+                dialogue: "우와! 고마워!<br>덕분에 자유롭게 움직일 수 있게 됐어.<br>이제 깃발을 잔뜩 모을 수 있겠다!<br><br><b style='color:#E65100;'>다음 페이지의 설명서를 읽고<br>완성된 게임을 즐겨보자!</b>",
+                isSuccessPage: true 
+            },
+            {
+                badge: "게임 설명서",
+                isManualPage: true 
+            }
+        ];
+
+        let currentStep = 0;
+
+        // 요소 가져오기
+        const introPage = document.getElementById('introPage');
+        const tutorialPage = document.getElementById('tutorialPage');
+        const progressText = document.getElementById('progressText');
+        
+        const storyModeContainer = document.getElementById('storyModeContainer');
+        const manualContainer = document.getElementById('manualContainer');
+        
+        const stageBadge = document.getElementById('stageBadge');
+        const storyText = document.getElementById('storyText');
+        const missionBox = document.getElementById('missionBox');
+        
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+
+        // 홈으로 이동
+        function goHome() {
+            location.href = 'index.html';
+        }
+
+        function startTutorial() {
+            introPage.style.display = 'none';
+            tutorialPage.style.display = 'flex';
+            currentStep = 0;
+            updateStep();
+        }
+
+        function updateStep() {
+            const data = storySteps[currentStep];
+            
+            // 진행도 표시
+            progressText.innerText = `${currentStep + 1} / ${storySteps.length}`;
+            
+            // 버튼 상태
+            btnPrev.style.visibility = (currentStep === 0) ? "hidden" : "visible";
+            btnNext.style.display = 'block';
+
+            // 페이지 모드 전환
+            if (data.isManualPage) {
+                // 설명서 페이지
+                storyModeContainer.style.display = 'none';
+                manualContainer.style.display = 'flex';
+                btnNext.style.display = 'none'; // 마지막 페이지이므로 다음 버튼 숨김
+            } 
+            else {
+                // 스토리/미션 페이지
+                storyModeContainer.style.display = 'flex';
+                manualContainer.style.display = 'none';
+                
+                stageBadge.innerText = data.badge;
+                storyText.innerHTML = data.dialogue;
+
+                if (data.isSuccessPage) {
+                    // 성공 메시지일 경우 미션박스 숨김
+                    missionBox.style.display = 'none';
+                } else {
+                    // 일반 미션일 경우 미션박스 보임
+                    missionBox.style.display = 'block';
+                    missionBox.innerHTML = data.mission;
+                }
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < storySteps.length - 1) {
+                currentStep++;
+                updateStep();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStep();
+            }
+        }
+    </script>
+</body>
+</html>

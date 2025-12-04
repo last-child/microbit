@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>즐거운 마이크로비트 교실 - 3차시</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        /* --- 🎨 디자인 (노란색/주황색 빛 센서 테마) --- */
+        :root {
+            --primary: #FFD54F;
+            --secondary: #FB8C00;
+            --bg: #FFF8E1;
+            --text: #37474F;
+        }
+
+        body { 
+            font-family: 'Jua', sans-serif; margin: 0; background-color: var(--bg); color: var(--text);
+            min-width: 1024px; overflow-x: auto;
+        }
+        
+        header { background-color: white; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(255, 160, 0, 0.3); cursor: pointer; }
+        h1 { margin: 0; font-size: 2rem; color: var(--secondary); }
+        .container { width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        /* 인트로 */
+        .intro-section {
+            animation: fadeIn 0.8s;
+            background: white; border-radius: 20px; padding: 60px 40px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 4px solid var(--primary); width: 600px; margin: 50px auto;
+        }
+        .btn-start { padding: 15px 50px; font-size: 1.8rem; background-color: var(--secondary); color: white; border: none; border-radius: 50px; cursor: pointer; font-family: 'Jua'; margin-top: 30px; box-shadow: 0 5px 0 #E65100; transition: transform 0.2s; }
+        .btn-start:hover { transform: scale(1.05); }
+
+        /* --- 📚 학습 뷰어 --- */
+        .study-section { display: none; flex-direction: column; height: 650px; animation: fadeIn 0.5s; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-home { background: #90A4AE; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Jua'; cursor: pointer; font-size: 1.2rem; }
+        .progress-indicator { font-size: 1.2rem; color: #777; background: #fff; padding: 5px 15px; border-radius: 15px; }
+
+        /* 1. [일반형] 좌우 분리 카드 */
+        .content-card {
+            flex: 1; background: white; border-radius: 30px; padding: 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid var(--primary);
+            display: none; overflow: hidden; 
+        }
+        .text-panel {
+            flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center;
+            border-right: 2px dashed #eee; background: #fff;
+        }
+        .slide-title { font-size: 2.2rem; color: var(--secondary); margin: 0 0 25px 0; }
+        .slide-desc { font-size: 1.7rem; line-height: 1.6; color: #444; word-break: keep-all; }
+        .image-panel {
+            flex: 1; background: #f9f9f9; display: flex; align-items: center; justify-content: center; padding: 30px; 
+        }
+        .image-panel img {
+            max-width: 100%; max-height: 100%; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: contain;
+        }
+
+        /* 2. [섹션 구분형] 중간 표지 */
+        .section-card {
+            flex: 1; background: #FFF3E0; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px dashed #FFB74D;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .section-title { font-size: 3.5rem; color: #E65100; margin-bottom: 30px; }
+        .section-desc { font-size: 1.8rem; color: #555; }
+
+        /* 3. [퀴즈형] 단일 박스 */
+        .quiz-card {
+            flex: 1; background: #E3F2FD; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid #64B5F6;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .quiz-question { font-size: 2.5rem; margin-bottom: 50px; color: #1565C0; font-weight: bold;}
+        .quiz-options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
+        .btn-quiz { 
+            padding: 20px 50px; font-size: 1.8rem; background: white; border: 3px solid #90CAF9; 
+            border-radius: 50px; cursor: pointer; font-family: 'Jua'; color: #555; transition: 0.2s; min-width: 150px;
+        }
+        .btn-quiz:hover { transform: scale(1.05); background: #2196F3; color: white; border-color: #2196F3; }
+
+        /* 네비게이션 */
+        .nav-area { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-nav { padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s; }
+        .btn-prev { background: #CFD8DC; color: #546E7A; visibility: hidden; }
+        .btn-next { background: var(--secondary); color: white; box-shadow: 0 5px 0 #E65100; }
+        .btn-next:hover { transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎓 즐거운 마이크로비트 교실</h1>
+    </header>
+
+    <div class="container">
+        
+        <div class="intro-section" id="introPage">
+            <span style="font-size: 5rem; display:block; margin-bottom:20px;">✨</span>
+            <h1 style="color:var(--secondary);">오늘의 수업 주제:<br>빛 센서 알아보기</h1>
+            <p style="font-size: 1.3rem; color:#666; margin-top:20px;">
+                마이크로비트에는 빛을 감지하는 눈이 있대요.<br>
+                함께 차근차근 배워볼까요?
+            </p>
+            <button class="btn-start" onclick="startClass()">수업 시작하기! 👉</button>
+        </div>
+
+        <div class="study-section" id="studyPage">
+            <div class="top-bar">
+                <button class="btn-home" onclick="goHome()">🏠 홈페이지로</button>
+                <div class="progress-indicator" id="progressText">1 / 15</div>
+            </div>
+
+            <div class="content-card" id="normalCard">
+                <div class="text-panel">
+                    <h2 class="slide-title" id="slideTitle">제목</h2>
+                    <div class="slide-desc" id="slideDesc">내용</div>
+                </div>
+                <div class="image-panel" id="imagePanel"></div>
+            </div>
+
+            <div class="section-card" id="sectionCard">
+                <div class="section-title" id="sectionTitle">챕터 제목</div>
+                <div class="section-desc" id="sectionDesc">설명</div>
+            </div>
+
+            <div class="quiz-card" id="quizCard">
+                <div class="quiz-question" id="quizQuestion">문제</div>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+
+            <div class="nav-area">
+                <button class="btn-nav btn-prev" id="btnPrev" onclick="changeSlide(-1)">이전</button>
+                <button class="btn-nav btn-next" id="btnNext" onclick="changeSlide(1)">다음 👉</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 📚 전체 수업 데이터 ---
+        const slides = [
+            // --- Part 1. 기초 ---
+            {   type: 'normal', title: "밤이 되면 가로등은<br>누가 켜는 걸까?", desc: "매일 밤 거리를 환하게 비춰주는 가로등.<br>그런데 저 많은 가로등을<br>사람이 하나하나 직접 켜는 걸까? 🤔", img: "images/ch3/3-1.png" },
+            {   type: 'normal', title: "스마트폰 화면도 그래! 📱", desc: "밝은 곳에 가면 화면이 쨍하게 밝아지고,<br>이불 속처럼 어두운 곳에 가면<br>눈이 부시지 않게 어두워지지?<br><br>이것도 다 <b>'빛 센서'</b> 덕분이야.", img: "images/ch3/3-2.jpg" },
+            {   type: 'normal', title: "마이크로비트에도<br>눈이 달려있어! 👀", desc: "마이크로비트 앞면의 LED 화면은<br>불빛을 내는 역할도 하지만,<br>동시에 빛을 감지하는 <b>눈 역할</b>도 해.", img: "images/ch3/3-3.png" },
+            {   type: 'normal', title: "밝기를 숫자로 알려줘", desc: "마이크로비트는 밝기를<br><b>0부터 255</b>까지의 숫자로 표현해.<br><br>밤이 되면 숫자가 <b>0</b>에 가까워지고,<br>낮에는 숫자가 <b>255</b>에 가까워져. 🌑☀️", img: "images/ch3/3-4.jpg" },
+            {   type: 'normal', title: "어떤 블록을 쓸까?", desc: "빛을 확인하려면<br><b>[입력]</b> 꾸러미에 있는<br><b>[빛 센서 값]</b> 블록이 필요해.<br><br>동그랗게 생긴 보라색 블록이야!", img: "images/ch3/3-5.jpg" },
+            {   type: 'normal', title: "미션: 밝기 측정하기", desc: "이번에 측정한 밝기 값을<br>LED 화면으로 계속 보여주도록<br>블록을 조립해 보자!", img: "images/ch3/3-6.png" },
+            {   type: 'normal', title: "숫자가 잘 나온다! 🎉", desc: "우와, 숫자가 잘 나오니?<br>지금 우리 교실은 얼마나 밝은지<br>숫자를 확인해서 선생님께 알려줄래?", img: "images/ch3/3-7.png" },
+            {   type: 'normal', title: "불을 끄면 어떻게 될까?", desc: "이번에는 교실 불을 꺼보거나<br>어두운 책상 밑으로 가져가 보자.<br><br>숫자가 어떻게 변하니?", img: "images/ch3/3-8.jpg" },
+            {   type: 'normal', title: "손바닥으로 가려봐! ✋", desc: "마지막 실험이야!<br>손바닥으로 마이크로비트를 덮어서<br>빛을 완전히 차단해 봐.<br><br>숫자가 0에 가까워지는지 확인해 보자.", img: "images/ch3/3-9.png" },
+            
+            // --- 🚩 섹션 1: 응용편 시작 ---
+            {   
+                type: 'section', 
+                title: "이제 응용해볼까?", 
+                desc: "빛 센서를 이용해서<br>우리 보물을 지키는<br>도난 경보기를 만들어 보자!" 
+            },
+
+            // --- Part 2. 응용 (도난 경보기) ---
+            {   type: 'normal', title: "보물을 지켜라!", desc: "보물상자는 어두운 곳에 숨겨져 있어.<br>누군가 상자를 열면<br><b>빛이 들어와서 밝아지겠지?</b><br><br>그때 경보를 울리게 만들어보자.", img: "images/ch3/3-10.png" },
+            {   type: 'normal', title: "경보기 미션 🚨", desc: "<b>만약</b> 빛 센서 값이 100보다 크다면(밝다면)<br><br><b>[소리]</b>를 재생하고 <br><b>[화난 표정]</b>을 지어줘!", img: "images/ch3/3-11.png" },
+            {   type: 'normal', title: "철통 보안 완료! 👮‍♂️", desc: "이제 도둑이 상자를 열면<br>깜짝 놀라서 도망갈 거야!<br><br>우리 보물은 이제 안전해.", img: "images/ch3/3-12.png" },
+
+            // --- 🚩 섹션 2: 퀴즈 시작 ---
+            {   
+                type: 'section', 
+                title: "🎁 보너스 퀴즈!", 
+                desc: "수업을 열심히 들었는지 확인해볼까?<br>시간이 남은 친구들만 도전해봐!" 
+            },
+
+            // --- Part 3. 퀴즈 ---
+            {
+                type: 'quiz',
+                question: "Q1. 빛의 밝기를 측정하는<br>센서의 이름은 무엇일까요?",
+                options: [
+                    { text: "초음파 센서", feedback: "땡! 🦇 초음파는 거리를 잴 때 써요." },
+                    { text: "조도(빛) 센서", isCorrect: true, feedback: "정답! ⭕ 빛을 감지하는 눈이에요!" },
+                    { text: "온도 센서", feedback: "땡! 🌡️ 그건 뜨거운지 차가운지 잴 때 써요." }
+                ]
+            },
+            {
+                type: 'quiz',
+                question: "Q2. 빛 센서 값 중<br>가장 '밝은' 상태의 숫자는?",
+                options: [
+                    { text: "0", feedback: "땡! 🌑 0은 완전 캄캄한 어둠이에요." },
+                    { text: "100", feedback: "음... 😅 100은 조금 애매한 밝기인걸요?" },
+                    { text: "255", isCorrect: true, feedback: "정답! ☀️ 255가 가장 큰 숫자(최대 밝기)예요!" }
+                ]
+            }
+        ];
+
+        // --- 시스템 로직 ---
+        let currentSlideIdx = 0;
+
+        const introPage = document.getElementById('introPage');
+        const studyPage = document.getElementById('studyPage');
+        
+        const normalCard = document.getElementById('normalCard');
+        const sectionCard = document.getElementById('sectionCard');
+        const quizCard = document.getElementById('quizCard');
+
+        const slideTitle = document.getElementById('slideTitle');
+        const slideDesc = document.getElementById('slideDesc');
+        const imagePanel = document.getElementById('imagePanel');
+        
+        const sectionTitle = document.getElementById('sectionTitle');
+        const sectionDesc = document.getElementById('sectionDesc');
+
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizOptions = document.getElementById('quizOptions');
+
+        const progressText = document.getElementById('progressText');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+
+        // [중요] 메인 페이지로 이동 (index.html)
+        function goHome() { 
+            location.href = 'index.html'; 
+        }
+
+        function startClass() {
+            introPage.style.display = 'none';
+            studyPage.style.display = 'flex';
+            currentSlideIdx = 0;
+            renderSlide();
+        }
+
+        function changeSlide(direction) {
+            const nextIdx = currentSlideIdx + direction;
+            if (nextIdx < 0) return;
+            if (nextIdx >= slides.length) {
+                alert("오늘 수업 끝! 모두 고생했어요 👏");
+                goHome();
+                return;
+            }
+            currentSlideIdx = nextIdx;
+            renderSlide();
+        }
+
+        function renderSlide() {
+            const slide = slides[currentSlideIdx];
+            
+            progressText.innerText = `${currentSlideIdx + 1} / ${slides.length}`;
+            btnPrev.style.visibility = (currentSlideIdx === 0) ? "hidden" : "visible";
+            btnNext.innerText = (currentSlideIdx === slides.length - 1) ? "수업 종료 🏁" : "다음 👉";
+
+            normalCard.style.display = 'none';
+            sectionCard.style.display = 'none';
+            quizCard.style.display = 'none';
+
+            if (slide.type === 'normal') {
+                normalCard.style.display = 'flex';
+                slideTitle.innerHTML = slide.title;
+                slideDesc.innerHTML = slide.desc;
+                imagePanel.innerHTML = `<img src="${slide.img}" alt="자료화면">`;
+            } 
+            else if (slide.type === 'section') {
+                sectionCard.style.display = 'flex';
+                sectionTitle.innerHTML = slide.title;
+                sectionDesc.innerHTML = slide.desc;
+            }
+            else if (slide.type === 'quiz') {
+                quizCard.style.display = 'flex';
+                quizQuestion.innerHTML = slide.question;
+                quizOptions.innerHTML = ""; 
+
+                slide.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-quiz';
+                    btn.innerText = opt.text;
+                    btn.onclick = () => {
+                        alert(opt.feedback);
+                        if (opt.isCorrect) {
+                            changeSlide(1); 
+                        }
+                    };
+                    quizOptions.appendChild(btn);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

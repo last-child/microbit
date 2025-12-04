@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>즐거운 마이크로비트 교실 - 7차시</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        /* --- 🎨 디자인 (보라색: 신비로움/초음파 테마) --- */
+        :root {
+            --primary: #BA68C8;
+            --secondary: #7B1FA2;
+            --bg: #F3E5F5;
+            --text: #4A148C;
+        }
+
+        body { 
+            font-family: 'Jua', sans-serif; margin: 0; background-color: var(--bg); color: var(--text);
+            min-width: 1024px; overflow-x: auto;
+        }
+        
+        /* 헤더: 클릭 기능 제거 */
+        header { background-color: white; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(123, 31, 162, 0.3); }
+        h1 { margin: 0; font-size: 2rem; color: var(--secondary); }
+        .container { width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        /* 인트로 */
+        .intro-section {
+            animation: fadeIn 0.8s;
+            background: white; border-radius: 20px; padding: 60px 40px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 4px solid var(--primary); width: 600px; margin: 50px auto;
+        }
+        .btn-start { padding: 15px 50px; font-size: 1.8rem; background-color: var(--secondary); color: white; border: none; border-radius: 50px; cursor: pointer; font-family: 'Jua'; margin-top: 30px; box-shadow: 0 5px 0 #4A148C; transition: transform 0.2s; }
+        .btn-start:hover { transform: scale(1.05); }
+
+        /* 학습 뷰어 */
+        .study-section { display: none; flex-direction: column; height: 650px; animation: fadeIn 0.5s; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-home { background: #90A4AE; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Jua'; cursor: pointer; font-size: 1.2rem; }
+        .progress-indicator { font-size: 1.2rem; color: #777; background: #fff; padding: 5px 15px; border-radius: 15px; }
+
+        /* --- [중요] 카드 스타일 수정 (이미지 없는 단일 박스형) --- */
+        .content-card {
+            flex: 1; background: white; border-radius: 30px; padding: 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid var(--primary);
+            display: none; overflow: hidden;
+            /* flex-direction 기본값(row) 유지하되, 내부 요소가 꽉 차게 변경 */
+        }
+        .text-panel {
+            flex: 1; /* 혼자 공간을 다 차지함 */
+            padding: 60px 80px; /* 여백을 넉넉하게 줌 */
+            display: flex; flex-direction: column; justify-content: center; align-items: center; /* 중앙 정렬 */
+            background: #fff;
+            text-align: center; /* 텍스트 가운데 정렬 */
+            border-right: none; /* 오른쪽 구분선 제거 */
+        }
+        .slide-title { font-size: 2.8rem; color: var(--secondary); margin: 0 0 40px 0; width: 100%; }
+        .slide-desc { font-size: 2rem; line-height: 1.7; color: #444; word-break: keep-all; width: 100%; }
+        
+        /* 이미지 패널은 숨김 처리 */
+        .image-panel { display: none; }
+
+        /* 섹션 카드 */
+        .section-card {
+            flex: 1; background: #F3E5F5; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px dashed #BA68C8;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .section-title { font-size: 3.5rem; color: #7B1FA2; margin-bottom: 30px; }
+        .section-desc { font-size: 1.8rem; color: #555; }
+
+        /* 퀴즈 카드 */
+        .quiz-card {
+            flex: 1; background: #EDE7F6; border-radius: 30px; padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 4px solid #9575CD;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .quiz-question { font-size: 2.5rem; margin-bottom: 50px; color: #512DA8; font-weight: bold;}
+        .quiz-options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
+        .btn-quiz { 
+            padding: 20px 50px; font-size: 1.8rem; background: white; border: 3px solid #B39DDB; 
+            border-radius: 50px; cursor: pointer; font-family: 'Jua'; color: #555; transition: 0.2s; min-width: 150px;
+        }
+        .btn-quiz:hover { transform: scale(1.05); background: #512DA8; color: white; border-color: #512DA8; }
+
+        .nav-area { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-nav { padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s; }
+        .btn-prev { background: #CFD8DC; color: #546E7A; visibility: hidden; }
+        .btn-next { background: var(--secondary); color: white; box-shadow: 0 5px 0 #4A148C; }
+        .btn-next:hover { transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎓 즐거운 마이크로비트 교실</h1>
+    </header>
+
+    <div class="container">
+        <div class="intro-section" id="introPage">
+            <span style="font-size: 5rem; display:block; margin-bottom:20px;">🦇</span>
+            <h1 style="color:var(--secondary);">오늘의 수업 주제:<br>초음파 센서와 오르골</h1>
+            <p style="font-size: 1.3rem; color:#666; margin-top:20px;">
+                소리로 거리를 잴 수 있다고요?<br>
+                손을 대면 노래하는 마법 상자를 만들어봐요!
+            </p>
+            <button class="btn-start" onclick="startClass()">수업 시작하기! 👉</button>
+        </div>
+
+        <div class="study-section" id="studyPage">
+            <div class="top-bar">
+                <button class="btn-home" onclick="goHome()">🏠 홈페이지로</button>
+                <div class="progress-indicator" id="progressText">1 / 13</div>
+            </div>
+
+            <div class="content-card" id="normalCard">
+                <div class="text-panel">
+                    <h2 class="slide-title" id="slideTitle">제목</h2>
+                    <div class="slide-desc" id="slideDesc">내용</div>
+                </div>
+                <div class="image-panel" id="imagePanel"></div>
+            </div>
+            <div class="section-card" id="sectionCard">
+                <div class="section-title" id="sectionTitle"></div>
+                <div class="section-desc" id="sectionDesc"></div>
+            </div>
+            <div class="quiz-card" id="quizCard">
+                <div class="quiz-question" id="quizQuestion"></div>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+
+            <div class="nav-area">
+                <button class="btn-nav btn-prev" id="btnPrev" onclick="changeSlide(-1)">이전</button>
+                <button class="btn-nav btn-next" id="btnNext" onclick="changeSlide(1)">다음 👉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 📚 수업 데이터 ---
+        const slides = [
+            // (1) 박쥐 이야기
+            {   
+                type: 'normal', 
+                title: "깜깜한 밤의 사냥꾼 🦇", 
+                desc: "박쥐는 아주 캄캄한 동굴에서도<br>부딪히지 않고 슝슝 잘 날아다녀.<br><br>눈도 잘 안 보이는데 어떻게 길을 알까?", 
+            },
+            
+            // (2) 자동차 후방 센서
+            {   
+                type: 'normal', 
+                title: "자동차도 소리를 들어 🚗", 
+                desc: "아빠 차가 뒤로 갈 때<br>'띠-띠-띠-' 소리 들어봤니?<br><br>뒤에 벽이 얼마나 가까운지<br>소리로 거리를 재고 있는 거야.", 
+            },
+
+            // (3) 원리 1: 메아리
+            {   
+                type: 'normal', 
+                title: "비밀은 '메아리'야! ⛰️", 
+                desc: "산에서 '야호~' 하면<br>소리가 산에 부딪혀서 되돌아오지?<br><br>소리가 갔다 오는 <b>시간</b>을 재면<br>거리가 얼마나 먼지 알 수 있어.", 
+            },
+
+            // (4) 원리 2: 센서 구조
+            {   
+                type: 'normal', 
+                title: "눈이 아니라 입과 귀? 👀", 
+                desc: "이게 바로 <b>초음파 센서</b>야.<br>눈처럼 생겼지만 사실은...<br><br>한쪽은 소리를 쏘는 <b>입</b>이고,<br>한쪽은 소리를 듣는 <b>귀</b>란다!", 
+            },
+
+            // (5) 원리 3: 작동 방식
+            {   
+                type: 'normal', 
+                title: "소리가 갔다 오는 시간 ⏱️", 
+                desc: "센서에서 나간 초음파가<br>벽에 부딪혀서 돌아오는 <b>시간</b>을 재는 거야.<br><br>🚀 빨리 돌아오면? → <b>가깝다!</b><br>🐢 늦게 돌아오면? → <b>멀다!</b>", 
+            },
+
+            // (6) 블록 소개
+            {   
+                type: 'normal', 
+                title: "거리 측정 블록 🧱", 
+                desc: "엔트리나 마이크로비트 블록 중에<br><b>[초음파 센서 값]</b> 블록이 있어.<br><br>이 블록이 거리를 cm(센티미터)로 알려줘.", 
+            },
+
+            // (7) 미션 1: 거리 재기
+            {   
+                type: 'normal', 
+                title: "미션 1: 거리 측정기 📏", 
+                desc: "초음파 센서 앞에 손을 갖다 대봐.<br>거리가 몇 cm인지<br>LED 화면에 숫자로 보여주도록 코딩해 보자!", 
+            },
+
+            // --- 🚩 섹션 1: 응용편 시작 ---
+            {   
+                type: 'section', 
+                title: "🎼 멜로디 오르골 만들기", 
+                desc: "거리를 재는 원리를 이용해서<br>손을 대면 노래하는<br>신기한 오르골을 만들어 보자!" 
+            },
+
+            // (8) 오르골 아이디어
+            {   
+                type: 'normal', 
+                title: "마법의 상자 ✨", 
+                desc: "평소에는 조용하다가<br>누군가 가까이 다가오면<br>아름다운 음악이 나오는 상자를 상상해 봐.", 
+            },
+
+            // (9) 미션 2: 조건문 코딩
+            {   
+                type: 'normal', 
+                title: "미션 2: 가까우면 연주해! 🎵", 
+                desc: "<b>만약(if)</b> 거리가 <b>10cm보다 작으면</b>(가까우면)<br><b>[멜로디]</b>를 재생하고,<br><br><b>아니면(else)</b> 소리를 끄도록 코딩해 보자.", 
+            },
+
+            // (10) 성공 확인
+            {   
+                type: 'normal', 
+                title: "성공! 아름다운 연주야 🎹", 
+                desc: "손을 가까이 대니까 음악이 나오지?<br>친구들에게 마법을 보여줘 봐!<br><br>이제 퀴즈로 마무리해볼까?", 
+            },
+
+            // --- 🚩 섹션 2: 퀴즈 시작 ---
+            {   
+                type: 'section', 
+                title: "🎁 보너스 퀴즈!", 
+                desc: "준비 됐나요?" 
+            },
+
+            // 퀴즈 1 (원리)
+            {
+                type: 'quiz',
+                question: "Q1. 초음파 센서는<br>무엇을 이용해서 거리를 잴까요?",
+                options: [
+                    { text: "빛", feedback: "땡! 🔦 그건 빛 센서(조도 센서)야." },
+                    { text: "소리(초음파)", isCorrect: true, feedback: "정답! 🦇 소리가 되돌아오는 시간을 재!" },
+                    { text: "냄새", feedback: "땡! 👃 냄새로는 거리를 알 수 없어." }
+                ]
+            },
+            
+            // 퀴즈 2 (코딩 로직)
+            {
+                type: 'quiz',
+                question: "Q2. 오르골 소리는<br>언제 울리게 코딩했나요?",
+                options: [
+                    { text: "물체가 멀리 있을 때", feedback: "땡! ⛰️ 멀면 소리가 멈춰야 해." },
+                    { text: "물체가 가까울 때", isCorrect: true, feedback: "정답! 📏 10cm보다 가까울 때(작을 때) 울렸어!" },
+                    { text: "어두워졌을 때", feedback: "땡! 🌑 그건 빛 센서 조건이야." }
+                ]
+            }
+        ];
+
+        // --- 시스템 로직 ---
+        let currentSlideIdx = 0;
+        const introPage = document.getElementById('introPage');
+        const studyPage = document.getElementById('studyPage');
+        const normalCard = document.getElementById('normalCard');
+        const sectionCard = document.getElementById('sectionCard');
+        const quizCard = document.getElementById('quizCard');
+        const slideTitle = document.getElementById('slideTitle');
+        const slideDesc = document.getElementById('slideDesc');
+        const imagePanel = document.getElementById('imagePanel');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const sectionDesc = document.getElementById('sectionDesc');
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizOptions = document.getElementById('quizOptions');
+        const progressText = document.getElementById('progressText');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+
+        // [중요] 메인 페이지로 이동 (index.html)
+        function goHome() { 
+            location.href = 'index.html'; 
+        }
+
+        function startClass() {
+            introPage.style.display = 'none';
+            studyPage.style.display = 'flex';
+            currentSlideIdx = 0;
+            renderSlide();
+        }
+        function changeSlide(direction) {
+            const nextIdx = currentSlideIdx + direction;
+            if (nextIdx < 0) return;
+            if (nextIdx >= slides.length) {
+                alert("수업 끝! 멋진 연주였어 🎼👏");
+                goHome();
+                return;
+            }
+            currentSlideIdx = nextIdx;
+            renderSlide();
+        }
+        function renderSlide() {
+            const slide = slides[currentSlideIdx];
+            progressText.innerText = `${currentSlideIdx + 1} / ${slides.length}`;
+            btnPrev.style.visibility = (currentSlideIdx === 0) ? "hidden" : "visible";
+            btnNext.innerText = (currentSlideIdx === slides.length - 1) ? "종료 🏁" : "다음 👉";
+
+            normalCard.style.display = 'none';
+            sectionCard.style.display = 'none';
+            quizCard.style.display = 'none';
+
+            if (slide.type === 'normal') {
+                normalCard.style.display = 'flex';
+                slideTitle.innerHTML = slide.title;
+                slideDesc.innerHTML = slide.desc;
+                // 이미지 렌더링 코드 제거됨 (이미지가 없으므로)
+            } else if (slide.type === 'section') {
+                sectionCard.style.display = 'flex';
+                sectionTitle.innerHTML = slide.title;
+                sectionDesc.innerHTML = slide.desc;
+            } else if (slide.type === 'quiz') {
+                quizCard.style.display = 'flex';
+                quizQuestion.innerHTML = slide.question;
+                quizOptions.innerHTML = ""; 
+                slide.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-quiz';
+                    btn.innerText = opt.text;
+                    btn.onclick = () => {
+                        alert(opt.feedback);
+                        if (opt.isCorrect) changeSlide(1);
+                    };
+                    quizOptions.appendChild(btn);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
