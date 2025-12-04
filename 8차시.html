@@ -24,7 +24,7 @@
             overflow-x: auto;
         }
         
-        /* 헤더: 클릭 기능 제거 */
+        /* 헤더 */
         header { background-color: white; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(135, 206, 250, 0.3); }
         h1 { margin: 0; font-size: 2rem; color: var(--secondary); }
 
@@ -46,25 +46,28 @@
         .btn-start { padding: 15px 50px; font-size: 1.8rem; background-color: var(--secondary); color: white; border: none; border-radius: 50px; cursor: pointer; font-family: 'Jua'; margin-top: 30px; box-shadow: 0 5px 0 #0277BD; transition: transform 0.2s; }
         .btn-start:hover { transform: scale(1.05); }
 
-        /* --- 튜토리얼 (단일 박스 레이아웃) --- */
+        /* --- 튜토리얼 영역 --- */
         .tutorial-section { display: none; flex-direction: column; height: 650px; }
         
-        /* 상단 네비게이션 바 (홈버튼 + 진행도) */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        /* 상단 바 */
+        .top-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
         .btn-home { background: #90A4AE; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Jua'; cursor: pointer; font-size: 1.2rem; }
         .progress-indicator { font-size: 1.2rem; color: #777; background: #fff; padding: 5px 15px; border-radius: 15px; }
 
-        /* 메인 스토리 패널 (중앙 정렬) */
+        /* 스토리 패널 */
         .story-panel { 
             flex: 1; display: flex; flex-direction: column; width: 100%; 
             animation: fadeIn 0.5s;
         }
 
-        .story-header { display: flex; align-items: center; justify-content: center; gap: 15px; height: 60px; margin-bottom: 20px; }
-        .character-icon { font-size: 3.5rem; animation: bounce 2s infinite; line-height: 1; }
-        .stage-badge { background: var(--secondary); color: white; padding: 8px 25px; border-radius: 30px; font-size: 1.4rem; white-space: nowrap; box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+        /* [변경] 중앙 아이콘/배지 영역 스타일 삭제됨 (.story-header 등 삭제) */
 
-        /* 말풍선 스타일 (화면 꽉 채우기) */
+        /* 말풍선 스타일 (이제 여기가 메인 컨텐츠 박스) */
         .speech-bubble {
             flex: 1; background: white; border-radius: 30px; padding: 50px;
             position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
@@ -72,18 +75,27 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
         }
 
+        /* [추가] 7차시 스타일의 제목 */
+        .story-title {
+            font-size: 2.5rem; 
+            color: var(--secondary); 
+            margin: 0 0 30px 0; 
+            width: 100%;
+        }
+
         .story-text { 
-            font-size: 2rem; line-height: 1.6; margin-bottom: 30px; 
-            color: #444; word-break: keep-all; 
+            font-size: 2.0rem; line-height: 1.5; margin-bottom: 40px; 
+            color: #333; word-break: keep-all; 
         }
         
         .mission-box { 
             background: #FFF3E0; padding: 30px; border-radius: 20px; 
-            border: 3px dashed #FFB74D; font-size: 1.6rem; 
-            color: #E65100; line-height: 1.6; width: 80%;
+            border: 3px dashed #FFB74D; font-size: 1.8rem; 
+            color: #E65100; line-height: 1.5; width: 85%;
+            animation: fadeIn 0.5s;
         }
 
-        /* 설명서 뷰 (숨겨져 있다가 나옴) */
+        /* 설명서 뷰 */
         .manual-view {
             display: none; flex-direction: column; justify-content: center; align-items: center;
             width: 100%; height: 100%; background: #F1F8E9; border-radius: 30px;
@@ -97,11 +109,19 @@
         .btn-play { background: #FF7043; color: white; width: 60%; margin-top: 30px; box-shadow: 0 5px 0 #D84315; text-align: center; text-decoration: none; padding: 20px 0; border-radius: 15px; font-size: 1.8rem; display: block; transition: 0.2s;}
         .btn-play:hover { transform: scale(1.05); }
 
-        /* 하단 버튼 영역 */
-        .nav-bar { margin-top: 30px; display: flex; justify-content: space-between; }
-        .btn-nav { padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s;}
-        .btn-prev { background: #CFD8DC; color: #546E7A; }
-        .btn-next { background: var(--secondary); color: white; box-shadow: 0 5px 0 #0288D1; }
+        /* 하단 네비게이션 버튼 */
+        .nav-bar { 
+            margin-top: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
+        .btn-nav { 
+            padding: 15px 40px; border-radius: 50px; border: none; font-size: 1.5rem; font-family: 'Jua'; cursor: pointer; transition: 0.2s; 
+            min-width: 120px;
+        }
+        .btn-prev { background: #CFD8DC; color: #546E7A; visibility: hidden; } 
+        .btn-next { background: var(--secondary); color: white; box-shadow: 0 4px 0 #0288D1; }
         .btn-next:hover { transform: scale(1.05); }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -136,12 +156,10 @@
             <div class="story-panel" id="storyPanel">
                 
                 <div id="storyModeContainer" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
-                    <div class="story-header">
-                        <div class="character-icon">🐧</div>
-                        <span class="stage-badge" id="stageBadge">1단계</span>
-                    </div>
-
+                    
                     <div class="speech-bubble" id="speechBubble">
+                        <h2 class="story-title" id="storyTitle">1단계</h2>
+                        
                         <div class="story-text" id="storyText">내용</div>
                         <div class="mission-box" id="missionBox">미션</div>
                     </div>
@@ -161,9 +179,10 @@
             </div>
 
             <div class="nav-bar">
-                <button class="btn-nav btn-prev" onclick="prevStep()" id="btnPrev">이전</button>
-                <button class="btn-nav btn-next" onclick="nextStep()" id="btnNext">다음 👉</button>
+                <button class="btn-nav btn-prev" onclick="prevStep()" id="btnPrev">◀ 이전</button>
+                <button class="btn-nav btn-next" onclick="nextStep()" id="btnNext">다음 ▶</button>
             </div>
+
         </div>
     </div>
 
@@ -197,7 +216,7 @@
             },
             {
                 badge: "미션 성공! 🎉",
-                dialogue: "우와! 고마워!<br>덕분에 자유롭게 움직일 수 있게 됐어.<br>이제 깃발을 잔뜩 모을 수 있겠다!<br><br><b style='color:#E65100;'>다음 페이지의 설명서를 읽고<br>완성된 게임을 즐겨보자!</b>",
+                dialogue: "우와! 고마워!<br>덕분에 자유롭게 움직일 수 있게 됐어.<br>이제 깃발을 잔뜩 모을 수 있겠다!<br><br><b style='color:#E65100;'>설명서를 읽고 완성된 게임을 즐겨보자!</b>",
                 isSuccessPage: true 
             },
             {
@@ -216,7 +235,8 @@
         const storyModeContainer = document.getElementById('storyModeContainer');
         const manualContainer = document.getElementById('manualContainer');
         
-        const stageBadge = document.getElementById('stageBadge');
+        // [수정] stageBadge 대신 storyTitle 사용
+        const storyTitle = document.getElementById('storyTitle');
         const storyText = document.getElementById('storyText');
         const missionBox = document.getElementById('missionBox');
         
@@ -243,28 +263,30 @@
             
             // 버튼 상태
             btnPrev.style.visibility = (currentStep === 0) ? "hidden" : "visible";
-            btnNext.style.display = 'block';
+            
+            // 다음 버튼 보임/숨김 (설명서 페이지에서는 숨김)
+            if (data.isManualPage) {
+                btnNext.style.display = 'none'; 
+            } else {
+                btnNext.style.display = 'block'; 
+            }
 
             // 페이지 모드 전환
             if (data.isManualPage) {
-                // 설명서 페이지
                 storyModeContainer.style.display = 'none';
                 manualContainer.style.display = 'flex';
-                btnNext.style.display = 'none'; // 마지막 페이지이므로 다음 버튼 숨김
             } 
             else {
-                // 스토리/미션 페이지
                 storyModeContainer.style.display = 'flex';
                 manualContainer.style.display = 'none';
                 
-                stageBadge.innerText = data.badge;
+                // [수정] Badge 데이터를 Title 요소에 넣음
+                storyTitle.innerText = data.badge;
                 storyText.innerHTML = data.dialogue;
 
                 if (data.isSuccessPage) {
-                    // 성공 메시지일 경우 미션박스 숨김
                     missionBox.style.display = 'none';
                 } else {
-                    // 일반 미션일 경우 미션박스 보임
                     missionBox.style.display = 'block';
                     missionBox.innerHTML = data.mission;
                 }
