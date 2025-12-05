@@ -124,6 +124,37 @@
         .btn-next { background: var(--secondary); color: white; box-shadow: 0 4px 0 #0288D1; }
         .btn-next:hover { transform: scale(1.05); }
 
+        /* --- 마지막 페이지 모드 선택 & 전환 스타일 --- */
+        .mode-select-view {
+            display: flex; flex-direction: column; align-items: center; width: 100%;
+        }
+        .manual-content {
+            display: none; /* 기본적으로 숨김 */
+            flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.5s;
+        }
+        
+        /* 선택 카드 버튼 스타일 */
+        .mode-card {
+            background: white; border: 3px solid #AED581; border-radius: 20px;
+            padding: 30px; margin: 10px; width: 45%; cursor: pointer;
+            text-align: center; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .mode-card:hover { transform: translateY(-5px); background: #F9FBE7; border-color: #7CB342; }
+        .mode-card h4 { font-size: 1.8rem; margin: 10px 0; color: #558B2F; }
+        .mode-card p { font-size: 1.2rem; color: #777; margin: 0; }
+        .mode-icon { font-size: 4rem; display: block; margin-bottom: 10px; }
+        
+        /* 뒤로가기 버튼 (작은 버튼) */
+        .btn-back {
+            background: #B0BEC5; color: white; border: none; padding: 10px 20px;
+            border-radius: 30px; font-family: 'Jua'; cursor: pointer; margin-bottom: 20px;
+            align-self: flex-start; /* 왼쪽 정렬 */
+        }
+        .btn-back:hover { background: #78909C; }
+        
+        /* 버튼 그룹 정렬 */
+        .selection-row { display: flex; justify-content: center; width: 100%; gap: 20px; }
+
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -166,14 +197,54 @@
                 </div>
 
                 <div class="manual-view" id="manualContainer">
-                    <h3>📜 게임 설명서</h3>
-                    <ul>
-                        <li>🕹️ <b>이동:</b> A, B 버튼으로 좌우 이동!</li>
-                        <li>⬆️ <b>점프:</b> 위로 기울이면 점프!</li>
-                        <li>🚩 <b>목표:</b> 깃발을 모아 100점 만들기</li>
-                        <li>❤️ <b>생명:</b> 하트 5개 (가시에 닿으면 감소)</li>
-                    </ul>
-                    <a href="https://playentry.org/project/69254e45afb77a2a34cf024e" target="_blank" class="btn-play">🎮 완성된 게임 하러 가기</a>
+    
+                    <div id="viewSelect" class="mode-select-view">
+                        <h3>🎮 어떻게 플레이 할까요?</h3>
+                        <p style="font-size: 1.5rem; color:#555; margin-bottom: 30px;">
+                            가지고 있는 도구에 맞춰 게임을 선택해주세요!
+                        </p>
+                        <div class="selection-row">
+                            <div class="mode-card" onclick="showManual('microbit')">
+                                <span class="mode-icon">🕹️</span>
+                                <h4>마이크로비트</h4>
+                                <p>센서 연결 필요</p>
+                            </div>
+                            <div class="mode-card" onclick="showManual('keyboard')">
+                                <span class="mode-icon">⌨️</span>
+                                <h4>키보드</h4>
+                                <p>방향키로 조종</p>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div id="viewMicrobit" class="manual-content">
+                        <button class="btn-back" onclick="showSelection()">◀ 다시 선택하기</button>
+                        <h3>📜 마이크로비트 설명서</h3>
+                        <ul>
+                            <li>🕹️ <b>이동:</b> A, B 버튼으로 좌우 이동!</li>
+                            <li>⬆️ <b>점프:</b> 위로 기울이면 점프!</li>
+                            <li>🚩 <b>목표:</b> 깃발 모아 100점 만들기</li>
+                            <li>❤️ <b>생명:</b> 하트 5개 (가시에 닿으면 깎임)</li>
+                        </ul>
+                        <a href="https://playentry.org/project/69254e45afb77a2a34cf024e" target="_blank" class="btn-play">
+                            🎮 게임 시작 (마이크로비트)
+                        </a>
+                    </div>
+                
+                    <div id="viewKeyboard" class="manual-content">
+                        <button class="btn-back" onclick="showSelection()">◀ 다시 선택하기</button>
+                        <h3>📜 키보드 설명서</h3>
+                        <ul>
+                            <li>🕹️ <b>이동:</b> 키보드 좌우 방향키 (←, →)</li>
+                            <li>⬆️ <b>점프:</b> 스페이스바 Space</li>
+                            <li>🚩 <b>목표:</b> 깃발 모아 100점 만들기</li>
+                            <li>❤️ <b>생명:</b> 하트 5개 (가시에 닿으면 깎임)</li>
+                        </ul>
+                        <a href="https://playentry.org/project/6932366e466d2de84cb56091" target="_blank" class="btn-play" style="background-color: #7E57C2; box-shadow: 0 5px 0 #5E35B1;">
+                            ⌨️ 게임 시작 (키보드)
+                        </a>
+                    </div>
+                
                 </div>
 
             </div>
@@ -275,6 +346,7 @@
             if (data.isManualPage) {
                 storyModeContainer.style.display = 'none';
                 manualContainer.style.display = 'flex';
+                showSelection(); 
             } 
             else {
                 storyModeContainer.style.display = 'flex';
@@ -293,6 +365,28 @@
             }
         }
 
+        // --- 모드 선택 로직 ---
+        function showManual(mode) {
+            // 1. 선택 화면 숨기기
+            document.getElementById('viewSelect').style.display = 'none';
+            
+            // 2. 선택한 설명서 보여주기
+            if (mode === 'microbit') {
+                document.getElementById('viewMicrobit').style.display = 'flex';
+                document.getElementById('viewKeyboard').style.display = 'none';
+            } else {
+                document.getElementById('viewMicrobit').style.display = 'none';
+                document.getElementById('viewKeyboard').style.display = 'flex';
+            }
+        }
+        
+        function showSelection() {
+            // 다시 선택 화면으로 돌아오기
+            document.getElementById('viewSelect').style.display = 'flex';
+            document.getElementById('viewMicrobit').style.display = 'none';
+            document.getElementById('viewKeyboard').style.display = 'none';
+        }
+
         function nextStep() {
             if (currentStep < storySteps.length - 1) {
                 currentStep++;
@@ -309,4 +403,5 @@
     </script>
 </body>
 </html>
+
 
