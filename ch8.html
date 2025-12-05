@@ -144,14 +144,6 @@
         .mode-card p { font-size: 1.2rem; color: #777; margin: 0; }
         .mode-icon { font-size: 4rem; display: block; margin-bottom: 10px; }
         
-        /* 뒤로가기 버튼 (작은 버튼) */
-        .btn-back {
-            background: #B0BEC5; color: white; border: none; padding: 10px 20px;
-            border-radius: 30px; font-family: 'Jua'; cursor: pointer; margin-bottom: 20px;
-            align-self: flex-start; /* 왼쪽 정렬 */
-        }
-        .btn-back:hover { background: #78909C; }
-        
         /* 버튼 그룹 정렬 */
         .selection-row { display: flex; justify-content: center; width: 100%; gap: 20px; }
 
@@ -218,7 +210,6 @@
                     </div>
                 
                     <div id="viewMicrobit" class="manual-content">
-                        <button class="btn-back" onclick="showSelection()">◀ 다시 선택하기</button>
                         <h3>📜 마이크로비트 설명서</h3>
                         <ul>
                             <li>🕹️ <b>이동:</b> A, B 버튼으로 좌우 이동!</li>
@@ -232,7 +223,6 @@
                     </div>
                 
                     <div id="viewKeyboard" class="manual-content">
-                        <button class="btn-back" onclick="showSelection()">◀ 다시 선택하기</button>
                         <h3>📜 키보드 설명서</h3>
                         <ul>
                             <li>🕹️ <b>이동:</b> 키보드 좌우 방향키 (←, →)</li>
@@ -403,5 +393,6 @@
     </script>
 </body>
 </html>
+
 
 
